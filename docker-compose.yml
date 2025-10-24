@@ -1,0 +1,12 @@
+services:
+  main-service:
+    build: .
+    container_name: main-service
+    ports:
+      - "3000:3000"
+    networks:
+      - my-microservices-net
+
+networks:
+  my-microservices-net:
+    external: true
