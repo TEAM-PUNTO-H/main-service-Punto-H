@@ -6,10 +6,19 @@ const router = Router();
 router.post("/", async (req: Request, res: Response) => {
   try {
     const response = await axios.post("http://orders-service:6000/api/orders", req.body);
-    res.json(response.data);
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ message: `Error creando pedido en orders-service ${err}` });
+    res.status(response.status).json(response.data);
+
+  } catch (error: any) {
+    const backendError = error.response;
+    if (backendError) {
+      res.status(backendError.status).json(backendError.data);
+    }
+    else {
+      res.status(500).json({
+        message: "Error interno en el servicio de productos",
+        error: error.message
+      });
+    }
   }
 });
 
@@ -17,9 +26,20 @@ router.post("/", async (req: Request, res: Response) => {
 router.get("/", async (req: Request, res: Response) => {
   try {
     const response = await axios.get("http://orders-service:6000/api/orders");
-    res.json(response.data);
-  } catch (err) {
-    res.status(500).json({ message: `Error conectando a orders-service ${err}`});
+
+    res.status(response.status).json(response.data);
+
+  } catch (error: any) {
+    const backendError = error.response;
+    if (backendError) {
+      res.status(backendError.status).json(backendError.data);
+    }
+    else {
+      res.status(500).json({
+        message: "Error interno en el servicio de productos",
+        error: error.message
+      });
+    }
   }
 });
 
