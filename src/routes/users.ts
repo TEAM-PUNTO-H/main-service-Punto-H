@@ -26,6 +26,25 @@ router.get("/allUsers", async (req: Request, res: Response) => {
 
 });
 
+router.put("/updateUser/:id", async (req: Request, res: Response) => {
+  try {
+    const response = await axios.put(`http://users-service:4000/api/users/updateUser/${req.params.id}`, req.body);
+    res.status(response.status).json(response.data);
+
+  } catch (error: any) {
+    const backendError = error.response;
+    if (backendError) {
+      res.status(backendError.status).json(backendError.data);
+    }
+    else {
+      res.status(500).json({
+        message: "Error interno en el servicio de usuarios",
+        error: error.message
+      });
+    }
+  }
+});
+
 router.post("/registerUser", async (req: Request, res: Response) => {
 
     try {
